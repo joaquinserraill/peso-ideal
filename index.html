@@ -403,6 +403,75 @@
 
   <script>
     function calcularTodo() {
+  const altura = parseFloat(document.getElementById("altura").value);
+  const pesoActual = parseFloat(document.getElementById("pesoActual").value);
+
+  const resultadoPrincipal = document.getElementById("resultadoPrincipal");
+  const pesoIdealEl = document.getElementById("pesoIdeal");
+  const imcEl = document.getElementById("imc");
+  const estadoImcEl = document.getElementById("estadoImc");
+  const pesoMinEl = document.getElementById("pesoMin");
+  const pesoMaxEl = document.getElementById("pesoMax");
+
+  // Validación altura
+  if (!altura || altura <= 0 || altura > 250) {
+    resultadoPrincipal.innerHTML =
+      "Ingresa una altura válida mayor a 0 y menor a 250 cm.";
+    return;
+  }
+
+  // Validación peso
+  if (pesoActual && (pesoActual <= 0 || pesoActual > 400)) {
+    resultadoPrincipal.innerHTML =
+      "Ingresa un peso válido mayor a 0 y menor a 400 kg.";
+    return;
+  }
+
+  const alturaMetros = altura / 100;
+  const pesoIdeal = altura - 100;
+  const pesoMinSaludable = 18.5 * (alturaMetros * alturaMetros);
+  const pesoMaxSaludable = 24.9 * (alturaMetros * alturaMetros);
+
+  pesoIdealEl.textContent = `${pesoIdeal.toFixed(1)} kg`;
+  pesoMinEl.textContent = `${pesoMinSaludable.toFixed(1)} kg`;
+  pesoMaxEl.textContent = `${pesoMaxSaludable.toFixed(1)} kg`;
+
+  if (!pesoActual) {
+    resultadoPrincipal.innerHTML =
+      `Tu peso ideal es <strong>${pesoIdeal.toFixed(1)} kg</strong>.<br>
+       Tu rango saludable va de <strong>${pesoMinSaludable.toFixed(1)} kg</strong> 
+       a <strong>${pesoMaxSaludable.toFixed(1)} kg</strong>.`;
+    return;
+  }
+
+  const imc = pesoActual / (alturaMetros * alturaMetros);
+  imcEl.textContent = imc.toFixed(1);
+
+  let estado = "";
+  let clase = "";
+
+  if (imc < 18.5) {
+    estado = "Bajo peso";
+    clase = "rojo";
+  } else if (imc < 25) {
+    estado = "Peso saludable";
+    clase = "verde";
+  } else if (imc < 30) {
+    estado = "Sobrepeso";
+    clase = "naranja";
+  } else {
+    estado = "Obesidad";
+    clase = "rojo";
+  }
+
+  estadoImcEl.textContent = estado;
+  estadoImcEl.className = `estado ${clase}`;
+
+  resultadoPrincipal.innerHTML =
+    `Tu IMC es <strong>${imc.toFixed(1)}</strong> y tu estado es <strong>${estado}</strong>.<br>
+     Tu rango saludable es entre <strong>${pesoMinSaludable.toFixed(1)} kg</strong> 
+     y <strong>${pesoMaxSaludable.toFixed(1)} kg</strong>.`;
+}
       const altura = parseFloat(document.getElementById("altura").value);
       const pesoActual = parseFloat(document.getElementById("pesoActual").value);
 
